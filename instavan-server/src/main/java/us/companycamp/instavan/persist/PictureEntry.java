@@ -4,6 +4,7 @@
  */
 package us.companycamp.instavan.persist;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Basic;
@@ -25,11 +26,13 @@ public class PictureEntry implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Expose
     private Long id;
     @Lob
     private byte[] picture;
     //   @ Index
     @Basic
+    @Expose
     private String uuid;
 
     public Long getId() {
