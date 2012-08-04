@@ -8,14 +8,14 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import us.companycamp.instavan.persist.NewEntity;
+import us.companycamp.instavan.persist.PictureEntry;
 
 /**
  *
  * @author waxzce
  */
 @Stateless
-public class NewEntityFacade extends AbstractFacade<NewEntity> {
+public class PictureEntryFacade extends AbstractFacade<PictureEntry> {
     @PersistenceContext(unitName = "us.companycamp_instavan_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -24,8 +24,8 @@ public class NewEntityFacade extends AbstractFacade<NewEntity> {
         return em;
     }
 
-    public NewEntityFacade() {
-        super(NewEntity.class);
+    public PictureEntryFacade() {
+        super(PictureEntry.class);
     }
     
 }
