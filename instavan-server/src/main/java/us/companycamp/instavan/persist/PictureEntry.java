@@ -5,11 +5,15 @@
 package us.companycamp.instavan.persist;
 
 import java.io.Serializable;
+import java.util.UUID;
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 
 /**
  *
@@ -24,6 +28,9 @@ public class PictureEntry implements Serializable {
     private Long id;
     @Lob
     private byte[] picture;
+    //   @ Index
+    @Basic
+    private String uuid;
 
     public Long getId() {
         return id;
@@ -31,6 +38,11 @@ public class PictureEntry implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @PrePersist
+    private void generateUUID() {
+        this.uuid = UUID.randomUUID().toString();
     }
 
     @Override
@@ -65,5 +77,12 @@ public class PictureEntry implements Serializable {
     public void setPicture(byte[] picture) {
         this.picture = picture;
     }
-    
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }

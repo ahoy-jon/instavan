@@ -50,9 +50,20 @@ public class PictureResource {
 
         return Response.ok(ne.getPicture()).build();
     }
+    
+    
+    @GET
+    @Produces("image/png")
+    @Path("u/{id}")
+    public Response getimgbyuuid(@PathParam("id") String id) {
+
+        PictureEntry ne = nef.getByUUID(id);
+
+        return Response.ok(ne.getPicture()).build();
+    }
 
     @POST
-    @Produces("text/plain")
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response getNewPicture(@FormDataParam("file") InputStream uploadedInputStream,
@@ -80,7 +91,9 @@ public class PictureResource {
         
         URI uri = context.getBaseUriBuilder().path("/photos/"+ne.getId().toString()).build() ;
         
-        return Response.created(uri).build();
+       
+        
+        return Response.created(uri).entity(ne.getUuid()).build();
 
 
     }
