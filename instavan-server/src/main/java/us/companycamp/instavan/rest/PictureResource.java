@@ -43,7 +43,7 @@ public class PictureResource {
      * us.companycamp.instavan.rest.PictureResource
      *
      * @return an instance of javax.ws.rs.core.Response
-     */
+    
     @GET
     @Produces("image/png")
     @Path("{id}")
@@ -54,9 +54,12 @@ public class PictureResource {
         return Response.ok(ne.getPicture()).build();
     }
     
+    *  
+    */
+    
     @GET
     @Produces("image/png")
-    @Path("u/{id}")
+    @Path("{id}")
     public Response getimgbyuuid(@PathParam("id") String id) {
         
         PictureEntry ne = nef.getByUUID(id);
@@ -66,7 +69,6 @@ public class PictureResource {
     
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response getNewPicture(@FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) throws URISyntaxException {
