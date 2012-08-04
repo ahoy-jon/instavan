@@ -41,7 +41,6 @@ public class PictureResource {
     @GsonInjector.GsonQualifier
     @Inject
     private Gson gson;
-    
     @Inject
     private SincerelyEntryFacade sef;
 
@@ -50,31 +49,24 @@ public class PictureResource {
      * us.companycamp.instavan.rest.PictureResource
      *
      * @return an instance of javax.ws.rs.core.Response
-    
-    @GET
-    @Produces("image/png")
-    @Path("{id}")
-    public Response getimg(@PathParam("id") String id) {
-        
-        PictureEntry ne = nef.find(Long.parseLong(id));
-        
-        return Response.ok(ne.getPicture()).build();
-    }
-    
-    *  
-    */
-    
+     *
+     * @GET @Produces("image/png") @Path("{id}") public Response
+     * getimg(@PathParam("id") String id) {
+     *
+     * PictureEntry ne = nef.find(Long.parseLong(id));
+     *
+     * return Response.ok(ne.getPicture()).build(); }
+     *
+     *
+     */
     @GET
     @Produces("image/png")
     @Path("{id}")
     public Response getimgbyuuid(@PathParam("id") String id) {
         
         PictureEntry ne = nef.getByUUID(id);
-        try {
-            sef.test("qsdfqsdfqsdf");
-        } catch (ResourceException ex) {
-            Logger.getLogger(PictureResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
+     //   sef.launchPrintProcedure(ne);
+        
         
         return Response.ok(ne.getPicture()).build();
     }
@@ -100,7 +92,7 @@ public class PictureResource {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
         
         URI uri = context.getBaseUriBuilder().path("/photos/" + ne.getId().toString()).build();
         

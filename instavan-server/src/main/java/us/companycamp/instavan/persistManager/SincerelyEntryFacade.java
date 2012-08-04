@@ -4,6 +4,7 @@
  */
 package us.companycamp.instavan.persistManager;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -54,15 +55,16 @@ public class SincerelyEntryFacade extends AbstractFacade<SincerelyEntry> {
 
     }
 
-    public void test(String s) throws ResourceException {
+    public void launchPrintProcedure(SincerelyEntry s) throws ResourceException {
         TextMessage message = null;
+           
         try {
             message = session.createTextMessage();
-            message.setText("This is message ");
+            message.setText(s.getId().toString());
             messageProducer.send(message);
 
         } catch (JMSException e) {
-            Logger.getAnonymousLogger().warning("Exception occurred: " + e.toString());
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception occurred: {0}", e.toString());
         }
     }
 }
