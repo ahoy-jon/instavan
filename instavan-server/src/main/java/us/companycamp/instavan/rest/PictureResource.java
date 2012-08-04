@@ -10,8 +10,11 @@ import com.sun.jersey.multipart.FormDataParam;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.resource.ResourceException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response;
 import us.companycamp.instavan.persist.PictureEntry;
 import us.companycamp.instavan.persistManager.PictureEntryFacade;
+import us.companycamp.instavan.persistManager.SincerelyEntryFacade;
 import us.companycamp.instavan.utils.GsonInjector;
 
 /**
@@ -37,6 +41,9 @@ public class PictureResource {
     @GsonInjector.GsonQualifier
     @Inject
     private Gson gson;
+    
+    @Inject
+    private SincerelyEntryFacade sef;
 
     /**
      * Retrieves representation of an instance of
@@ -63,6 +70,11 @@ public class PictureResource {
     public Response getimgbyuuid(@PathParam("id") String id) {
         
         PictureEntry ne = nef.getByUUID(id);
+        try {
+            sef.test("qsdfqsdfqsdf");
+        } catch (ResourceException ex) {
+            Logger.getLogger(PictureResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return Response.ok(ne.getPicture()).build();
     }

@@ -14,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;
-import javax.persistence.Table;
 
 /**
  *
@@ -34,6 +33,8 @@ public class PictureEntry implements Serializable {
     @Basic
     @Expose
     private String uuid;
+    
+    
 
     public Long getId() {
         return id;
