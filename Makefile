@@ -8,7 +8,7 @@ clean:
 	rm -r target
 
 cleanAndroid:
-	rm -r target/android
+	rm -rf target/android || echo "it's clean"
 
 emptyAndroid: cleanAndroid
 	./phonegap2/lib/android/bin/create target/android org.instavan Instavan
@@ -21,5 +21,15 @@ android: emptyAndroid
 androidBOOM: android
 	./target/android/cordova/BOOM
 
+cleanIOS:
+	rm -rf target/ios || echo "it's clean"
+
+emptyIOS: cleanIOS
+	./phonegap2/lib/ios/bin/create target/ios instavan Instavan
+
+ios:
+	cp -f *.js target/ios/www/
+	cp -f *.html target/ios/www/
+	cp -f *.css target/ios/www/	
 
 
