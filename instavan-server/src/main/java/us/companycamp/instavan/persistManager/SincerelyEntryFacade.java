@@ -4,7 +4,9 @@
  */
 package us.companycamp.instavan.persistManager;
 
-
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.*;
@@ -22,6 +24,13 @@ public class SincerelyEntryFacade extends AbstractFacade<SincerelyEntry> {
 
     @PersistenceContext(unitName = "us.companycamp_instavan_war_1.0-SNAPSHOTPU")
     private EntityManager em;
+    @Resource(lookup = "jms/cof")
+    private ConnectionFactory connectionFactory;
+    @Resource(mappedName = "jms/sclyq")
+    private Queue queue;
+    private Connection connection = null;
+    private Session session = null;
+    private MessageProducer messageProducer = null;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -31,43 +40,29 @@ public class SincerelyEntryFacade extends AbstractFacade<SincerelyEntry> {
     public SincerelyEntryFacade() {
         super(SincerelyEntry.class);
     }
-    @Resource(lookup = "jms/cof")
-    private ConnectionFactory connectionFactory;
-    @Resource(mappedName = "jms/sclyq")
-    private Queue queue;
+
+    @PostConstruct
+    private void activateJMS() throws JMSException {
+        connection = connectionFactory.createConnection();
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        messageProducer = session.createProducer(queue);
+    }
+
+    @PreDestroy
+    private void deadJMS() throws JMSException {
+        connection.close();
+
+    }
 
     public void test(String s) throws ResourceException {
-        Connection connection = null;
-        Session session = null;
-        MessageProducer messageProducer = null;
         TextMessage message = null;
-        final int NUM_MSGS = 3;
-
         try {
-            connection = connectionFactory.createConnection();
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            
-            messageProducer = session.createProducer(queue);
             message = session.createTextMessage();
+            message.setText("This is message ");
+            messageProducer.send(message);
 
-            for (int i = 0; i < NUM_MSGS; i++) {
-                message.setText("This is message " + (i + 1));
-                System.out.println("Sending message: " + message.getText());
-                messageProducer.send(message);
-            }
-
-            System.out.println("To see if the bean received the messages,");
-            System.out.println(
-                    " check <install_dir>/domains/domain1/logs/server.log.");
-        } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.toString());
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (JMSException e) {
-                }
-            }
+        } catch (JMSException e) {
+            Logger.getAnonymousLogger().warning("Exception occurred: " + e.toString());
         }
     }
 }
