@@ -186,6 +186,10 @@ mylog("phase "+nb);
 };
 
 document.addEventListener('deviceready', _.bind(activatePhase, this, 1), false);
+document.addEventListener('deviceready', function(){
+	$('#camera').click(camera);
+	$('#album').click(photolib);
+}, false);
 
 var app = {
     initialize: function() {
@@ -211,39 +215,48 @@ var app = {
     }
 };
 
+var pictureSuccess = function(imageData) { 
+  var path = imageData; //"data:image/jpeg;base64," +  imageData;//"data:image/jpeg;base64," + imageData;
+   //path = "prite-VAN.png";
+/*mylog(path);
+
+var html = '<img height="300" width="300" src=' + path + '/>';
+      //  mylog(html);
+        $("#pics").append(html);*/
+
+   $("#postcard").instavanPostcard({
+      "message": "DAFUCK",
+      "sprite": "sprite-VAN.png",
+      "photo": path
+    });
+
+}; 
+
+
+// capture error callback
+var captureError = function(error) {
+    console.log("error");
+    navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+};
 
 
 var camera = function() {
-    var pictureSuccess = function(imageData) { 
-      var path = imageData; //"data:image/jpeg;base64," +  imageData;//"data:image/jpeg;base64," + imageData;
-       //path = "prite-VAN.png";
-    /*mylog(path);
-
-    var html = '<img height="300" width="300" src=' + path + '/>';
-          //  mylog(html);
-            $("#pics").append(html);*/
-
-       $("#postcard").instavanPostcard({
-          "message": "DAFUCK",
-          "sprite": "sprite-VAN.png",
-          "photo": path
-        });
-
-    }; 
-
-
-    // capture error callback
-    var captureError = function(error) {
-        console.log("error");
-        navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
-    };
-
-    
     navigator.camera.getPicture(pictureSuccess, captureError, 
       {destinationType:  Camera.DestinationType.FILE_URI ,
-encodingType: Camera.EncodingType.JPEG,
- targetHeight: 1238
-});
+		encodingType: Camera.EncodingType.JPEG,
+ 		targetHeight: 1238
+		});
+    // start image capture
+    //navigator.device.capture.captureImage(captureSuccess, captureError, {limit:1});
+};
+
+var photolib = function() {
+    navigator.camera.getPicture(pictureSuccess, captureError, 
+      {destinationType:  Camera.DestinationType.FILE_URI ,
+		encodingType: Camera.EncodingType.JPEG,
+ 		targetHeight: 1238,
+		sourceType:navigator.camera.PictureSourceType.SAVEDPHOTOALBUM
+		});
     // start image capture
     //navigator.device.capture.captureImage(captureSuccess, captureError, {limit:1});
 };
