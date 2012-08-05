@@ -4,6 +4,7 @@
  */
 package us.companycamp.instavan.persistManager;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -41,10 +42,11 @@ public class UploadedSincerelyEntryFacade extends AbstractFacade<UploadedSincere
         Root<UploadedSincerelyEntry> r = cq.from(UploadedSincerelyEntry.class);
 
         cq.select(r).where(em.getCriteriaBuilder().equal(r.get("se"), se));
-        try {
-            return em.createQuery(cq).getSingleResult();
-        } catch (NoResultException e) {
+        List<UploadedSincerelyEntry> lu = em.createQuery(cq).getResultList();
+        if (lu.isEmpty()) {
             return null;
+        } else {
+            return lu.get(0);
         }
     }
 }

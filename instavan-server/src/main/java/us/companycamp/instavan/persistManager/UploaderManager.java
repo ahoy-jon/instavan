@@ -106,6 +106,7 @@ public class UploaderManager implements MessageListener {
             Logger.getAnonymousLogger().info(gson.toJson(scr));
             UploadedSincerelyEntry use = new UploadedSincerelyEntry();
             use.setSe(se);
+            usef.create(use);
             for (Iterator<SincerelyCreateResponseSendTo> it = scr.getSent_to().iterator(); it.hasNext();) {
                 SincerelyCreateResponseSendTo scrst = it.next();
                 HttpPost rr = new HttpPost("https://snapi.sincerely.com/shiplib/debug");
@@ -122,14 +123,14 @@ public class UploaderManager implements MessageListener {
                 respdf.getEntity().writeTo(baos);
                 ce.setPdf_file(baos.toByteArray());
                 use.addCard(ce);
+                usef.edit(use);
                 /*
                  * File f = File.createTempFile("test-" + scrst.getPrintId(),
                  * "pdf"); respdf.getEntity().writeTo(new FileOutputStream(f));
                  * Runtime.getRuntime().exec("open " + f.getAbsolutePath()); *
                  */
             }
-            usef.create(use);
-            Logger.getAnonymousLogger().info(gson.toJson(use));
+            usef.edit(use);
 
         } catch (ClientProtocolException ex) {
             Logger.getLogger(UploaderManager.class.getName()).log(Level.SEVERE, null, ex);
