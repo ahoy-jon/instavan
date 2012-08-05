@@ -21,14 +21,14 @@
   display: none;
 }
 
-#phase1 .btn, .filterchooser .btn{
+.phase .btn{
 	width:100%;
 	padding-top:14px;
 	padding-bottom:14px;
 	margin-bottom:14px;
 }
 
-#phase2 .well{
+.phase .well{
 	padding:2px;
 	overflow:hidden;
 }
