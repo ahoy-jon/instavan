@@ -154,9 +154,10 @@ var mylog = function(s) {
 var activatePhase = function(nb){
   $('.phase').css('display','none');
   $('#phase'+nb).css('display','block');
-
+mylog("phase "+nb);
 };
 
+document.addEventListener('deviceready', _.bind(activatePhase, this, 1), false);
 
 var app = {
     initialize: function() {
@@ -166,10 +167,11 @@ var app = {
         document.addEventListener('deviceready', this.deviceready, false);
     },
     deviceready: function() {
+	   // activatePhase(1);
+    
         // note that this is an event handler so the scope is that of the event
         // so we need to call app.report(), and not this.report()
         app.report('deviceready');
-        activatePhase(1);
     },
     report: function(id) { 
         mylog("report:" + id);
