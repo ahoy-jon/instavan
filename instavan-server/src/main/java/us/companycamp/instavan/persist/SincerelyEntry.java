@@ -22,10 +22,10 @@ public class SincerelyEntry implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Expose
-    @OneToOne
+    @OneToOne(cascade= CascadeType.ALL)
     private PeopleAndAdress sender;
     @Expose
-    @OneToMany
+    @OneToMany(cascade= CascadeType.ALL)
     private List<PeopleAndAdress> recipients;
     @Basic
     @Expose
