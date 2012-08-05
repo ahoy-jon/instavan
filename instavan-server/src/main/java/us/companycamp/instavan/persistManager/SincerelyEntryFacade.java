@@ -13,7 +13,10 @@ import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.resource.ResourceException;
+import us.companycamp.instavan.persist.PictureEntry;
 import us.companycamp.instavan.persist.SincerelyEntry;
 
 /**
@@ -57,7 +60,7 @@ public class SincerelyEntryFacade extends AbstractFacade<SincerelyEntry> {
 
     public void launchPrintProcedure(SincerelyEntry s) throws ResourceException {
         TextMessage message = null;
-           
+
         try {
             message = session.createTextMessage();
             message.setText(s.getId().toString());
@@ -66,5 +69,14 @@ public class SincerelyEntryFacade extends AbstractFacade<SincerelyEntry> {
         } catch (JMSException e) {
             Logger.getAnonymousLogger().log(Level.WARNING, "Exception occurred: {0}", e.toString());
         }
+    }
+
+    public SincerelyEntry getByUUID(String uuid) {
+        CriteriaQuery<SincerelyEntry> cq = em.getCriteriaBuilder().createQuery(SincerelyEntry.class);
+        Root<SincerelyEntry> r = cq.from(SincerelyEntry.class);
+
+        cq.select(r).where(em.getCriteriaBuilder().equal(r.get("uuid"), uuid));
+
+        return em.createQuery(cq).getSingleResult();
     }
 }

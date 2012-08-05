@@ -45,7 +45,7 @@ public class PeopleAndAdress implements Serializable {
     @Basic
     @Expose
     @SerializedName("state")
-    private String state;
+    private String state_c;
     @Basic
     @Expose
     private String postalcode;
@@ -137,13 +137,15 @@ public class PeopleAndAdress implements Serializable {
         this.postalcode = postalcode;
     }
 
-    public String getState() {
-        return state;
+    public String getState_c() {
+        return state_c;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setState_c(String state_c) {
+        this.state_c = state_c;
     }
+
+   
 
     public String getStreet1() {
         return street1;

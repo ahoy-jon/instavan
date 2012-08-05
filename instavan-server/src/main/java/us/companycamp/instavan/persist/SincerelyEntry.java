@@ -7,6 +7,7 @@ package us.companycamp.instavan.persist;
 import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.*;
 
 /**
@@ -33,12 +34,25 @@ public class SincerelyEntry implements Serializable {
     @Basic
     @Expose
     private Integer frontPhotoId;
+    @Lob
+    private byte[] frontPhoto;
     @Basic
     @Expose
     private Integer profilePhotoId;
     @Basic
+    @Lob
+    private byte[] profilePhoto;
+    @Basic
     @Expose
     private Boolean testMode;
+    @Basic
+    @Expose
+    private String uuid;
+
+    @PrePersist
+    private void generateUUID() {
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     public Long getId() {
         return id;
@@ -120,6 +134,29 @@ public class SincerelyEntry implements Serializable {
     public void setTestMode(Boolean testMode) {
         this.testMode = testMode;
     }
-    
+
+    public byte[] getFrontPhoto() {
+        return frontPhoto;
+    }
+
+    public void setFrontPhoto(byte[] frontPhoto) {
+        this.frontPhoto = frontPhoto;
+    }
+
+    public byte[] getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(byte[] profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
     
 }

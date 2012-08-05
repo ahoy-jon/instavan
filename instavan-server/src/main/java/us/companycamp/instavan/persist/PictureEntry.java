@@ -44,10 +44,7 @@ public class PictureEntry implements Serializable {
         this.id = id;
     }
 
-    @PrePersist
-    private void generateUUID() {
-        this.uuid = UUID.randomUUID().toString();
-    }
+   
 
     @Override
     public int hashCode() {
