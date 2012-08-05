@@ -21,9 +21,12 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import us.companycamp.instavan.persist.CardEntry;
 import us.companycamp.instavan.persist.PeopleAndAdress;
 import us.companycamp.instavan.persist.SincerelyEntry;
+import us.companycamp.instavan.persist.UploadedSincerelyEntry;
 import us.companycamp.instavan.persistManager.SincerelyEntryFacade;
+import us.companycamp.instavan.persistManager.UploadedSincerelyEntryFacade;
 import us.companycamp.instavan.utils.GsonInjector;
 
 /**
@@ -34,7 +37,7 @@ import us.companycamp.instavan.utils.GsonInjector;
 @Path("photos")
 @Stateless
 public class PictureResource {
-    
+
     @Context
     private UriInfo context;
     @GsonInjector.GsonQualifier
@@ -42,6 +45,8 @@ public class PictureResource {
     private Gson gson;
     @Inject
     private SincerelyEntryFacade sef;
+    @Inject
+    private UploadedSincerelyEntryFacade usef;
 
     /**
      * Retrieves representation of an instance of
@@ -63,13 +68,49 @@ public class PictureResource {
     @Path("{id}")
     public Response getimgbyuuid(@PathParam("id") String id) {
 
-        // PictureEntry ne = nef.getByUUID(id);
-        //   sef.launchPrintProcedure(ne);
+
         SincerelyEntry se = sef.getByUUID(id);
-        
+
         return Response.ok(gson.toJson(se)).build();
     }
-    
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/uploaded")
+    public Response getuploadedimgbyuuid(@PathParam("id") String id) {
+
+
+        UploadedSincerelyEntry use = usef.getBySincerelyEntryUUID(id);
+        if (use != null) {
+            return Response.ok(gson.toJson(use)).build();
+        } else {
+            return Response.status(404).build();
+        }
+    }
+
+    @GET
+    @Produces("application/x-pdf")
+    @Path("{id}/uploaded/{cardid}")
+    public Response getuploadedimgbyuuidgetpdf(@PathParam("id") String id, @PathParam("cardid") String cardid) {
+
+        // PictureEntry ne = nef.getByUUID(id);
+        //   sef.launchPrintProcedure(ne);
+        UploadedSincerelyEntry use = usef.getBySincerelyEntryUUID(id);
+
+
+        for (Iterator<CardEntry> it = use.getCards().iterator(); it.hasNext();) {
+            CardEntry c = it.next();
+            if (c.getPrintId().equals(cardid)) {
+                return Response.ok(c.getPdf_file()).build();
+            }
+
+        }
+
+
+        return Response.status(404).build();
+
+    }
+
     @GET
     @Produces("image/png")
     @Path("{id}/front")
@@ -78,10 +119,10 @@ public class PictureResource {
         // PictureEntry ne = nef.getByUUID(id);
         //   sef.launchPrintProcedure(ne);
         SincerelyEntry se = sef.getByUUID(id);
-        
+
         return Response.ok(se.getFrontPhoto()).build();
     }
-    
+
     @GET
     @Produces("image/png")
     @Path("{id}/profile")
@@ -90,10 +131,10 @@ public class PictureResource {
         // PictureEntry ne = nef.getByUUID(id);
         //   sef.launchPrintProcedure(ne);
         SincerelyEntry se = sef.getByUUID(id);
-        
+
         return Response.ok(se.getProfilePhoto()).build();
     }
-    
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -107,7 +148,7 @@ public class PictureResource {
              * FormDataContentDisposition fileDetail2
              *
              */) {
-        
+
         SincerelyEntry se = new SincerelyEntry();
         PeopleAndAdress sender = new PeopleAndAdress();
         Map<String, PeopleAndAdress> mr = new TreeMap<String, PeopleAndAdress>();
@@ -116,7 +157,7 @@ public class PictureResource {
                 Entry<String, List<FormDataBodyPart>> ebp = it.next();
                 String name = ebp.getKey();
                 FormDataBodyPart bp = ebp.getValue().get(0);
-                
+
                 if (name.endsWith("file")) {
                     if ("frontfile".equals(name)) {
                         se.setFrontPhoto(getPiFromMultipart(bp));
@@ -170,17 +211,16 @@ public class PictureResource {
                     }
                 } else if (name.equals("message")) {
                     se.setMessage(bp.getEntityAs(String.class));
-                    Logger.getAnonymousLogger().info(bp.getEntityAs(String.class));
                 }
-                
-                
+
+
             }
             se.setTestMode(true);
             se.setRecipients(new ArrayList<PeopleAndAdress>(mr.values()));
             se.setSender(sender);
-            
+
             sef.create(se);
-            
+
             sef.launchPrintProcedure(se);
             URI uri = context.getBaseUriBuilder().path("/photos/" + se.getUuid().toString()).build();// + ne.getId().toString()).build();
 
@@ -193,16 +233,16 @@ public class PictureResource {
         /*
          * catch (URISyntaxException e) { e.printStackTrace(); }
          */
-        
+
         return Response.serverError().build();
-        
-        
+
+
     }
-    
+
     private Boolean isHeader(BodyPart bp, String name) {
         return name.equals(bp.getContentDisposition().getParameters().get("name"));
     }
-    
+
     private byte[] getPiFromMultipart(FormDataBodyPart bp) throws IOException {
         byte[] bytes = new byte[1024];
         int read = 0;

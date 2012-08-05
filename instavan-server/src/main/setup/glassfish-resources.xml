@@ -5,6 +5,13 @@
     <description>upload</description>
     <property name="Name" value="jms/sincerelyQueue"/>
   </admin-object-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/sclyq" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="sclyqname"/>
+  </admin-object-resource>
+  <connector-resource enabled="true" jndi-name="jms/cof" object-type="user" pool-name="jms/cof">
+    <description/>
+  </connector-resource>
   <jdbc-connection-pool allow-non-component-callers="false" associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" connection-validation-method="auto-commit" datasource-classname="org.postgresql.ds.PGSimpleDataSource" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" is-isolation-level-guaranteed="true" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="false" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="post-gre-sql_instavan_instavanPool" non-transactional-connections="false" ping="false" pool-resize-quantity="2" pooling="true" res-type="javax.sql.DataSource" statement-cache-size="0" statement-leak-reclaim="false" statement-leak-timeout-in-seconds="0" statement-timeout-in-seconds="-1" steady-pool-size="8" validate-atmost-once-period-in-seconds="0" wrap-jdbc-objects="false">
     <property name="serverName" value="localhost"/>
     <property name="portNumber" value="5432"/>
@@ -15,4 +22,5 @@
     <property name="driverClass" value="org.postgresql.Driver"/>
   </jdbc-connection-pool>
   <jdbc-resource enabled="true" jndi-name="jdbc/instavan" object-type="user" pool-name="post-gre-sql_instavan_instavanPool"/>
+  <connector-connection-pool associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-definition-name="javax.jms.ConnectionFactory" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="true" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="jms/cof" ping="false" pool-resize-quantity="2" pooling="true" resource-adapter-name="jmsra" steady-pool-size="8" validate-atmost-once-period-in-seconds="0"/>
 </resources>
