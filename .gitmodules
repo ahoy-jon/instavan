@@ -1,3 +1,3 @@
 [submodule "phonegap2"]
-	path = phonegap2
+	path = mobile/phonegap2
 	url = https://github.com/un-jon/phonegap2.git
