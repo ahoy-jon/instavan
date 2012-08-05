@@ -19,9 +19,14 @@ jQuery.fn.instavanPostcard = function(params) {
   return this;
 };
 
+var bigCanvas;
+var resizedCanvas;
+var filteredCanvas;
+
 /**
  * Function responsible for creating the postcard out of the photo, 
  * sprite and message.
+
  */
 function launchRenderingOnNode (jqNode, params) {
   // Not everything is ready
@@ -30,9 +35,13 @@ function launchRenderingOnNode (jqNode, params) {
 
   
   mylog("PreRendering"); 
+  
+
   var canvasCopy = document.createElement("canvas");
   var canvas = document.createElement("canvas");
   var contextCopy = canvasCopy.getContext("2d");
+
+  resizedCanvas = canvas; // FOR LATER USE
 
   var ctx = canvas.getContext("2d");
       mylog('ratio pre load');
@@ -45,17 +54,6 @@ function launchRenderingOnNode (jqNode, params) {
 
   var img = new Image();
   ctx.globalCompositeOperation = 'source-over';
-  /*
-  context.rect(1, 1, jqNode.attr("width")-2, jqNode.attr("height")-2);
-  context.stroke();
-  context.rect(9, 9, 482, 402);
-  context.stroke();
-  */
-  // Render the photo
- 
-
-
-
 
     mylog('ratio pre load');
 
@@ -82,35 +80,33 @@ function launchRenderingOnNode (jqNode, params) {
 
     img.src = params["photo"];
 
-/*
-Caman(params["photo"], '#postcard', function () {
-    // manipulate image here
-
-    this.brightness(5).render();
-
-});
-*/
-/*
-  mylog("PreLoad"); 
-  var photo = new Image();
-  photo.src = params["photo"];
-  mylog("PostPath"); 
-  photo.onload = function() { 
-    mylog("PreImage"); 
-    var camanImg = Caman(photo);
-     // Apply filter
- 
-   applyVANFilter(camanImg);
- 
-
-  camanImg.render(function() {
-    mylog("Rendering ok!");
-    drawRenderedImage(context, this, params);
-  });
-  
-  };
-  */
 }
+
+
+function filter(myFilter) {
+
+    activatePhase(3);
+    filteredCanvas = document.createElement("canvas");
+    filteredCanvas.setAttribute("id","filteredCanvas");
+    filteredCanvas.width = resizedCanvas.width;
+    filteredCanvas.height = resizedCanvas.height;
+    var filteredCanvasCtx = filteredCanvas.getContext("2d");
+    
+    filteredCanvasCtx.drawImage(resizedCanvas, 0, 0, resizedCanvas.width, resizedCanvas.height, 0, 0, 
+      resizedCanvas.width, resizedCanvas.height);
+
+    $('#postcardfiltered').replaceWith(filteredCanvas);
+
+    Caman('#filteredCanvas', function () {
+      this.brightness(-5).render();
+      this.vibrance(-20).render();
+      this.contrast(20).render();
+    });
+
+
+}
+
+
 
 /** Filters */
 function applyVANFilter(camanImg) {
