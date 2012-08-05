@@ -1,0 +1,139 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- Le styles -->
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-responsive.css" rel="stylesheet">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="js/caman.full.min.js"></script>
+	<script type="text/javascript" src="js/instavan.js"></script>
+	<style>
+		@font-face {
+			font-family: 'angelina';
+			font-style: normal;
+			font-weight: normal;
+			src: url('fonts/angelina.woff') format('woff');
+		}
+		.centered {
+			text-align: center;
+			margin-top: 2em;
+			margin-bottom: 2em;
+		}
+	</style>
+</head>
+<body>
+
+	<form id="form-instavan">
+		<fieldset>
+			<legend>Choix de la photo à instavaniser</legend>
+			<input type="radio" name="photo" value="crepetown-1.jpg" checked>
+			<img src="crepetown-1.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN1.jpg">
+			<img src="img/photo-VAN1.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN2.jpg">
+			<img src="img/photo-VAN2.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN3.jpg">
+			<img src="img/photo-VAN3.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN4.jpg">
+			<img src="img/photo-VAN4.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN5.jpg">
+			<img src="img/photo-VAN5.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN6.jpg">
+			<img src="img/photo-VAN6.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN7.jpg">
+			<img src="img/photo-VAN7.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN8.jpg">
+			<img src="img/photo-VAN8.jpg"  height="50" />
+			<input type="radio" name="photo" value="img/photo-VAN9.jpg">
+			<img src="img/photo-VAN9.jpg"  height="50" />
+		</fieldset>
+		
+		<div class="centered">
+			<canvas id="postcard" height="500" width="500"></canvas>
+		</div>
+		
+		<fieldset>
+			<legend>Choix du filtre</legend>
+			<input type="radio" name="filter" value="VAN" checked> Le Voyage à Nantes
+			<input type="radio" name="filter" value="Bourriquet"> Bourriquet
+			<input type="radio" name="filter" value="Porcinet"> Porcinet
+			<input type="radio" name="filter" value="Tigrou"> Tigrou
+		</fieldset>
+		<fieldset>
+			<legend>Choix de l'étiquette LVAN</legend>
+			<input type="radio" name="sprite" value="img/sprite-VAN.png" checked>
+			<img src="img/sprite-VAN.png"  height="50" />
+			<input type="radio" name="sprite" value="img/sprite-VAN2.png">
+			<img src="img/sprite-VAN2.png"  height="50" />
+			<input type="radio" name="sprite" value="img/sprite-VAN3.png">
+			<img src="img/sprite-VAN3.png"  height="50" />
+			<input type="radio" name="sprite" value="img/sprite-VAN4.png">
+			<img src="img/sprite-VAN4.png"  height="50" />
+			<input type="radio" name="sprite" value="img/sprite-VAN5.png">
+			<img src="img/sprite-VAN5.png"  height="50" />
+		</fieldset>
+		<input type="text" id="message"
+			style="font: normal 18px angelina; height: auto"
+			placeholder="Votre message ici..." />
+		<input type="button" id="btLaunch" value="Générer">
+	</form>
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="js/bootstrap-transition.js"></script>
+	<script src="js/bootstrap-alert.js"></script>
+	<script src="js/bootstrap-modal.js"></script>
+	<script src="js/bootstrap-dropdown.js"></script>
+	<script src="js/bootstrap-scrollspy.js"></script>
+	<script src="js/bootstrap-tab.js"></script>
+	<script src="js/bootstrap-tooltip.js"></script>
+	<script src="js/bootstrap-popover.js"></script>
+	<script src="js/bootstrap-button.js"></script>
+	<script src="js/bootstrap-collapse.js"></script>
+	<script src="js/bootstrap-carousel.js"></script>
+	<script src="js/bootstrap-typeahead.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// Bind everything
+			$("#form-instavan input").change(function (event) {
+				// Get the submitted data
+				var message = $("#message").val();
+				var spriteUrl = $("input[name='sprite']:checked").val();
+				var photoUrl = $("input[name='photo']:checked").val();
+				var filter = $("input[name='filter']:checked").val();
+				// Create the instavan instance
+				$("#postcard").instavanPostcard({
+					"message": message,
+					"sprite": spriteUrl,
+					"photo": photoUrl,
+					"filter": filter
+				});
+				// Disable default submit
+				event.preventDefault();
+			});
+			// Bind the form
+			$("#btLaunch").click(function (event) {
+				// Get the submitted data
+				var message = $("#message").val();
+				var spriteUrl = $("input[name='sprite']:checked").val();
+				var photoUrl = $("input[name='photo']:checked").val();
+				var filter = $("input[name='filter']:checked").val();
+				// Create the instavan instance
+				$("#postcard").instavanPostcard({
+					"message": message,
+					"sprite": spriteUrl,
+					"photo": photoUrl,
+					"filter": filter
+				});
+				// Disable default submit
+				event.preventDefault();
+			});
+		});
+	</script>
+</body>

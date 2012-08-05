@@ -1,0 +1,144 @@
+<html>
+<head>
+	<!--
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	-->
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="js/caman.full.min.js"></script>
+	<style>
+		@font-face {
+			font-family: 'Windsong';
+			font-style: normal;
+			font-weight: normal;
+			src: url('fonts/Windsong.woff') format('woff');
+		}
+		@font-face {
+			font-family: 'akaDora';
+			font-style: normal;
+			font-weight: normal;
+			src: url('fonts/akaDora.woff') format('woff');
+		}
+		@font-face {
+			font-family: 'angelina';
+			font-style: normal;
+			font-weight: normal;
+			src: url('fonts/angelina.woff') format('woff');
+		}
+		@font-face {
+			font-family: 'HoneyScript';
+			font-style: normal;
+			font-weight: normal;
+			src: url('fonts/HoneyScript-Light.woff') format('woff');
+		}
+		@font-face {
+			font-family: 'Jellyka';
+			font-style: normal;
+			font-weight: normal;
+			src: url('fonts/Jellyka_Estrya_Handwriting.woff') format('woff');
+		}
+	</style>
+</head>
+<body>
+
+	<div style="font: normal 30px Windsong; display: none">Test Windsong</div>
+	<div style="font: normal 30px akaDora; display: none">Test akaDora</div>
+	<div style="font: normal 30px angelina">Test angelina</div>
+	<div style="font: normal 30px HoneyScript; display: none">Test HoneyScript</div>
+	<div style="font: normal 30px Jellyka; display: none">Test Jellyka</div>
+
+	<canvas id="postcard" height="500" width="500"></canvas>
+
+	<!--
+	<img src="crepetown-1.jpg" id="image-original" />
+	<img src="crepetown-1.jpg" id="image-filtered" />
+	<canvas id="canvas-sprite" height="100" width="100"></canvas>
+	-->
+
+	<script type="text/javascript">
+		var spriteLoaded = false;
+		var photoLoaded = false;
+		
+		// Sprites
+		console.log("Chargement des sprites...");
+		var sprite = new Image();
+		sprite.onload = function () {
+			console.log("Sprite image loaded...");
+			spriteLoaded = true;
+			launchRendering();
+		};
+		//sprite.src = "img/sprite-spiderman.png";
+		sprite.src = "img/sprite-VAN.png";
+		
+		// Photos
+		console.log("Chargement des photos...");
+		var photo = new Image();
+		photo.onload = function () {
+			console.log("Photo image loaded...");
+			photoLoaded = true;
+			launchRendering();
+		};
+		photo.src = "crepetown-1.jpg";
+		
+		function launchRendering () {
+			// Not everything is ready
+			if ( (! spriteLoaded) || (! photoLoaded) ) return;
+			
+			// Prepare the canvas
+			console.log("Prepare the canvas...");
+			var canvas = $("#postcard")[0];
+			var context = canvas.getContext("2d");
+			context.globalCompositeOperation = 'source-over';
+			context.rect(1, 1, canvas.width-2, canvas.height-2);
+			context.stroke();
+			context.rect(9, 9, 482, 402);
+			context.stroke();
+			
+			// Render the photo
+			console.log("Render the photo...");
+			var camanImg = Caman(photo);
+			camanImg.brightness(-5); // dark side
+			camanImg.vibrance(-20); // unsaturate
+			camanImg.contrast(20); // raise contrast
+			camanImg.render(function() {
+				console.log("Rendering ok!");
+				drawRenderedImage(context, camanImg);
+			});
+			
+			// trick
+			context.onerror = function() {
+				this.textAlign = "center";
+				this.font = '30px "angelina"';
+				this.fillText("I'm instagraming LVAN bitch !", 250, 450);
+			};
+			
+			// Draw the text
+			console.log("Draw the text...");
+			context.textAlign = "center";
+			context.font = '30px "angelina"';
+			//context.font = '30px "Arial"';
+			context.fillText("I'm instagraming LVAN bitch !", 250, 450);
+		}
+		
+		function drawRenderedImage(context, camanImg) {
+			// Draw the rendering 
+			console.log("Draw rendering...");
+			context.drawImage(camanImg.canvas, 10, 10, 480, 400);
+			
+			// Handle compositing
+			console.log("Compositing sprite...");
+			var x = 10 + 480 - 145;
+			var y = 10 + 400 - 120;
+			context.drawImage(sprite, x, y, 150, 150);
+		}
+		
+		function launchCompositing(camanImg) {
+			var x = camanImg.canvas.width - 160; //x = 10;
+			var y = camanImg.canvas.height - 160; // y = 10;
+			console.log("Compositing du sprite en ("+x+", "+y+")...");
+			var context = camanImg.canvas.getContext("2d");
+			context.globalCompositeOperation = 'source-over';
+			context.drawImage(sprite, x, y, 150, 150);
+			console.log("done !");
+		}
+	</script>
+</body>

@@ -1,0 +1,48 @@
+<html>
+<head>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="js/caman.full.min.js"></script>
+</head>
+<body>
+
+	<img src="crepetown-1.jpg" id="image-original" />
+	<img src="crepetown-1.jpg" id="image-filtered" />
+	<canvas id="canvas-sprite" height="100" width="100"></canvas>
+
+	<script type="text/javascript">
+		// Sprites
+		console.log("Chargement des sprites...");
+		var sprite = new Image();
+		sprite.src = "img/sprite-VAN.png";
+		//sprite.src = "img/sprite-spiderman.png";
+		sprite.onload = function () {
+			console.log("Sprite image loaded...");
+			launchRendering();
+		};
+		
+		function launchRendering () {
+			console.log("Transformation de l'image en canvas...");
+			var camanImg = Caman("#image-filtered");
+			
+			console.log("Application des filtres...");
+			camanImg.brightness(-5); // dark side
+			camanImg.vibrance(-20); // unsaturate
+			camanImg.contrast(20); // raise contrast
+			camanImg.render(function() {
+				console.log("Rendering ok!");
+				launchCompositing(camanImg);
+			});
+		}
+		
+		function launchCompositing(camanImg) {
+			var x = camanImg.canvas.width - 160; //x = 10;
+			var y = camanImg.canvas.height - 160; // y = 10;
+			console.log("Compositing du sprite en ("+x+", "+y+")...");
+			var context = camanImg.canvas.getContext("2d");
+			context.globalCompositeOperation = 'source-over';
+			//context.fillRect(x, y, 150, 50);
+			context.drawImage(sprite, x, y, 150, 150);
+			console.log("done !");
+		}
+	</script>
+</body>
