@@ -31,7 +31,7 @@ var filteredCanvas;
 function launchRenderingOnNode (jqNode, params) {
   // Not everything is ready
   //if ( (! spriteLoaded) || (! photoLoaded) ) return;
- activatePhase(2);
+ activatePhase(4);
 
   
   mylog("PreRendering"); 
@@ -76,6 +76,8 @@ function launchRenderingOnNode (jqNode, params) {
         canvas.height = img.height * ratio;
         ctx.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height);
         $('#postcard').replaceWith(canvas);
+
+        stamp('VAN');
     };
 
     img.src = params["photo"];
@@ -124,12 +126,19 @@ function stamp(myStamp) {
     stampedCanvasCtx.drawImage(resizedCanvas, 0, 0, resizedCanvas.width, resizedCanvas.height, 0, 0, 
       resizedCanvas.width, resizedCanvas.height);
 
+ 
+ 
+   stampedCanvas.globalCompositeOperation = 'source-over';
 
+
+   
   $('#postcardstamp').replaceWith(stampedCanvas);
 
-  applyFilterTo("#stampedCanvas");
+   $("#wait").css("display","none");  
 
-  stampedCanvas.globalCompositeOperation = 'source-over';
+   
+
+applyFilterTo("#stampedCanvas");
 
   var x = stampedCanvas.width - 120;
   var y = stampedCanvas.height - 100;
@@ -138,7 +147,8 @@ function stamp(myStamp) {
     stampedCanvasCtx.drawImage(sprite, x, y, 75, 75);
   };
   sprite.src = "sprite-VAN.png";
-  
+
+
 
 
 }
