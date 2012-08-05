@@ -22,6 +22,7 @@ jQuery.fn.instavanPostcard = function(params) {
 var bigCanvas;
 var resizedCanvas;
 var filteredCanvas;
+var stampedCanvas;
 
 /**
  * Function responsible for creating the postcard out of the photo, 
@@ -184,6 +185,60 @@ function sticker() {
 
 }
 
+
+function prepareSendIRL() {
+  activatePhase("IRL");
+
+}
+
+function sendPostCard() {
+
+
+ postCanvasToURL('http://localhost:9999/upload', 'img', 'img.jpeg', stampedCanvas, 'image/jpeg');
+//  mylog( stampedCanvas.toDataURL('image/jpeg'))
+  
+     
+
+}
+
+
+
+function sendAsBinary(xhr, message) {
+  if (typeof(XMLHttpRequest.prototype.sendAsBinary) === "undefined") {
+   var bytes = Array.prototype.map.call(message, function(c) {
+      return c.charCodeAt(0) & 0xff;
+    });
+    xhr.send(new Uint8Array(bytes).buffer);
+ 
+  } else {
+    xhr.sendAsBinary(message);
+  }
+       
+}
+
+
+function postCanvasToURL(url, name, fn, canvas, type) {
+
+ 
+
+
+  var data = canvas.toDataURL(type);
+  data = data.replace('data:' + type + ';base64,', '');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  var boundary = 'ohaiimaboundary';
+  xhr.setRequestHeader(
+    'Content-Type', 'multipart/form-data; boundary=' + boundary);
+  sendAsBinary(xhr, [
+    '--' + boundary,
+    'Content-Disposition: form-data; name="' + name + '"; filename="' + fn + '"',
+    'Content-Type: ' + type,
+    '',
+    atob(data),
+    '--' + boundary + '--'
+  ].join('\r\n'));
+}
 
 var mylog = function(s) {
 
