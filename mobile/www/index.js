@@ -97,22 +97,37 @@ function filter(myFilter) {
 
     $('#postcardfiltered').replaceWith(filteredCanvas);
 
-    Caman('#filteredCanvas', function () {
+    applyFilterTo('#filteredCanvas')
+
+
+
+}
+
+function applyFilterTo(id) {
+      Caman(id, function () {
       this.brightness(-5).render();
       this.vibrance(-20).render();
       this.contrast(20).render();
     });
 
-
 }
 
 
+function stamp(myStamp) {
+  activatePhase(4);
+  stampedCanvas = document.createElement("canvas");
+  stampedCanvas.setAttribute("id","stampedCanvas");
+  stampedCanvas.width = resizedCanvas.width;
+  stampedCanvas.height = resizedCanvas.height;
+  var stampedCanvasCtx = stampedCanvas.getContext("2d");
 
-/** Filters */
-function applyVANFilter(camanImg) {
-  camanImg.brightness(-5); // dark side
-  camanImg.vibrance(-20); // unsaturate
-  camanImg.contrast(20); // raise contrast
+    stampedCanvasCtx.drawImage(resizedCanvas, 0, 0, resizedCanvas.width, resizedCanvas.height, 0, 0, 
+      resizedCanvas.width, resizedCanvas.height);
+
+
+  $('#postcardstamp').replaceWith(stampedCanvas);
+
+
 }
 
 /**
