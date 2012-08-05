@@ -21,11 +21,16 @@
   display: none;
 }
 
-#phase1 .btn{
+#phase1 .btn, .filterchooser .btn{
 	width:100%;
 	padding-top:14px;
 	padding-bottom:14px;
 	margin-bottom:14px;
+}
+
+#phase2 .well{
+	padding:2px;
+	overflow:hidden;
 }
 
 .navbar .brand img{
