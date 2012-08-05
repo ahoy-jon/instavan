@@ -29,8 +29,6 @@ emptyIOS: cleanIOS
 	./phonegap2/lib/ios/bin/create target/ios instavan Instavan
 
 ios:
-	cp -f *.js target/ios/www/
-	cp -f *.html target/ios/www/
-	cp -f *.css target/ios/www/	
+	cp -fr www/* target/ios/www/
 
 
