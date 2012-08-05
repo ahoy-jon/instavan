@@ -20,24 +20,53 @@
 -->
 <html>
   <head>
-    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta name="viewport" content="width=device-width; user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
-      <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title">
+      <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen" title="no title">
+      <link rel="stylesheet" href="css/bootstrap-responsive.min.css" type="text/css" media="screen" title="no title">
+      <!--link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title"-->
       <script type="text/javascript" charset="utf-8" src="cordova-2.0.0.js"></script>
+      <script src="underscore.js"></script>
+
       <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
    
 
       <script type="text/javascript" src="caman.full.min.js"></script>
+      <script type="text/javascript" src="js/bootstrap.min.js"></script>
       <script type="text/javascript" charset="utf-8" src="index.js"></script>
 
 
   </head>
   <body id="stage" class="theme">
+
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      
+                </div>
+  </div>
+</div>
+
+<div id="phase1" class="phase">
+
+<div class="row">
+  <div class="span12"><div class="btn" id="album" onclick="album()">Use album</button></div>
+  </div>
+  <div class="row">
+  <div class="span12"><button  class="btn" id="camera" onclick="camera()">Use camera</button></div>
+   </div>
+  <div class="row">
+  <div class="span12"><button  class="btn" id="sticker" onclick="sticker()">Stick that shit</button></div></div>
+</div>
+
+            </div>
+            
+<div id="phase2" class="phase">
+
+
         <div class="app">
-            <button id="album" onclick="album()">Use album</button>
-            <button id="camera" onclick="camera()">Use camera</button>
-            <button id="sticker" onclick="sticker()">Stick that shit</button>
+            
         </div>
 
 
@@ -47,26 +76,16 @@
     </div>
 
     <div class="centered">
-      <canvas id="postcard" height="500" width="500"></canvas>
+      <canvas id="postcard" ></canvas>
     </div>
 
-    <div id="log">
-
-    </div>
+    
   
+    </div>
+<div id="log">
 
-        <script src="bootstrap-transition.js"></script>
-        <script src="bootstrap-alert.js"></script>
-        <script src="bootstrap-modal.js"></script>
-       <script src="bootstrap-dropdown.js"></script>
-       <script src="bootstrap-scrollspy.js"></script>
-       <script src="bootstrap-tab.js"></script>
-       <script src="bootstrap-tooltip.js"></script>
-       <script src="bootstrap-popover.js"></script>
-       <script src="bootstrap-button.js"></script>
-       <script src="bootstrap-collapse.js"></script>
-       <script src="bootstrap-carousel.js"></script>
-       <script src="bootstrap-typeahead.js"></script>
+    </div>
+        
   <script type="text/javascript">
     app.initialize();
   </script>

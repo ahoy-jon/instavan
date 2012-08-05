@@ -26,27 +26,71 @@ jQuery.fn.instavanPostcard = function(params) {
 function launchRenderingOnNode (jqNode, params) {
   // Not everything is ready
   //if ( (! spriteLoaded) || (! photoLoaded) ) return;
-  
-  // Prepare the canvas
-  console.log("Prepare the canvas...");
-  if (jqNode[0].getContext == undefined) {
-    console.log("Unable to access canvas context !");
-    return;
-  }
+ activatePhase(2);
 
+  
   mylog("PreRendering"); 
-  var context = jqNode[0].getContext("2d");
-  jqNode.attr("width", "500");
-  jqNode.attr("height", "500");
-  context.globalCompositeOperation = 'source-over';
+  var canvasCopy = document.createElement("canvas");
+  var canvas = document.createElement("canvas");
+  var contextCopy = canvasCopy.getContext("2d");
+
+  var ctx = canvas.getContext("2d");
+      mylog('ratio pre load');
+
+  var maxWidth = screen.width - 12;
+  var maxHeight = screen.height * 0.6;
+
+  mylog(maxWidth+'x'+maxHeight);
+      mylog('ratio pre load');
+
+  var img = new Image();
+  ctx.globalCompositeOperation = 'source-over';
+  /*
   context.rect(1, 1, jqNode.attr("width")-2, jqNode.attr("height")-2);
   context.stroke();
   context.rect(9, 9, 482, 402);
   context.stroke();
-  
+  */
   // Render the photo
-  console.log("Render the photo...");
+ 
 
+
+
+
+    mylog('ratio pre load');
+
+    img.onload = function()
+    {
+        var ratio = 1;
+
+        if(img.width > maxWidth)
+            ratio = maxWidth / img.width;
+        else if(img.height > maxHeight)
+            ratio = maxHeight / img.height;
+
+        mylog('ratio : '+ratio);
+
+        canvasCopy.width = img.width;
+        canvasCopy.height = img.height;
+        contextCopy.drawImage(img, 0, 0);
+
+        canvas.width = img.width * ratio;
+        canvas.height = img.height * ratio;
+        ctx.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height);
+        $('#postcard').replaceWith(canvas);
+    };
+
+    img.src = params["photo"];
+
+/*
+Caman(params["photo"], '#postcard', function () {
+    // manipulate image here
+
+    this.brightness(5).render();
+
+});
+*/
+/*
   mylog("PreLoad"); 
   var photo = new Image();
   photo.src = params["photo"];
@@ -65,6 +109,7 @@ function launchRenderingOnNode (jqNode, params) {
   });
   
   };
+  */
 }
 
 /** Filters */
@@ -110,7 +155,11 @@ var mylog = function(s) {
 
 
 
+var activatePhase = function(nb){
+  $('.phase').css('display','none');
+  $('#phase'+nb).css('display','block');
 
+};
 
 
 var app = {
@@ -124,10 +173,12 @@ var app = {
         // note that this is an event handler so the scope is that of the event
         // so we need to call app.report(), and not this.report()
         app.report('deviceready');
+        activatePhase(1);
     },
     report: function(id) { 
-        console.log("report:" + id);
+        mylog("report:" + id);
         // hide the .pending <p> and show the .complete <p>
+
         document.querySelector('#' + id + ' .pending').className += ' hide';
         var completeElem = document.querySelector('#' + id + ' .complete');
         completeElem.className = completeElem.className.split('hide').join('');
@@ -152,7 +203,7 @@ var camera = function() {
           "photo": path
         });
 
-    } 
+    }; 
 
 
     // capture error callback
@@ -165,8 +216,8 @@ var camera = function() {
     navigator.camera.getPicture(pictureSuccess, captureError, 
       {destinationType:  Camera.DestinationType.FILE_URI ,
 encodingType: Camera.EncodingType.JPEG,
- targetHeight: 500
-})
+ targetHeight: 1238
+});
     // start image capture
     //navigator.device.capture.captureImage(captureSuccess, captureError, {limit:1});
-}
+};
