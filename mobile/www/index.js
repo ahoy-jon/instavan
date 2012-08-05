@@ -106,11 +106,7 @@ function filter(myFilter) {
 }
 
 function applyFilterTo(id) {
-      Caman(id, function () {
-      this.brightness(-5).render();
-      this.vibrance(-20).render();
-      this.contrast(20).render();
-    });
+     
 
 }
 
@@ -138,15 +134,22 @@ function stamp(myStamp) {
 
    
 
-applyFilterTo("#stampedCanvas");
 
-  var x = stampedCanvas.width - 120;
+   Caman("#stampedCanvas", function () {
+      this.brightness(-5).render();
+      this.vibrance(-20).render();
+      this.contrast(20).render();
+
+        var x = stampedCanvas.width - 120;
   var y = stampedCanvas.height - 100;
   var sprite = new Image();
   sprite.onload = function () {
     stampedCanvasCtx.drawImage(sprite, x, y, 75, 75);
   };
   sprite.src = "sprite-VAN.png";
+    });
+
+
 
 
 
