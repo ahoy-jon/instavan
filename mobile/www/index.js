@@ -127,6 +127,19 @@ function stamp(myStamp) {
 
   $('#postcardstamp').replaceWith(stampedCanvas);
 
+  applyFilterTo("#stampedCanvas");
+
+  stampedCanvas.globalCompositeOperation = 'source-over';
+
+  var x = stampedCanvas.width - 120;
+  var y = stampedCanvas.height - 100;
+  var sprite = new Image();
+  sprite.onload = function () {
+    stampedCanvasCtx.drawImage(sprite, x, y, 75, 75);
+  };
+  sprite.src = "sprite-VAN.png";
+  
+
 
 }
 
